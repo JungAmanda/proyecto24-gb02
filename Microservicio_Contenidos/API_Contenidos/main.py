@@ -15,6 +15,7 @@ Comando de ejecución:
 T_NO_ENC = "Temporada no encontrada"
 C_NO_ENC = "Contenido no encontrado"
 A_NO_ENC = "Actor no encontrado"
+D_NO_ENC = "Director no encontrado"
 
 #Crear la aplicacion
 app = FastAPI(
@@ -327,7 +328,7 @@ def get_actor(idActor: str, db: Session = Depends(get_db)):
 def get_director(idDirector: str, db: Session = Depends(get_db)):
     director = crud.get_director(db=db, idDirector=idDirector)
     if director is None:
-        raise HTTPException(status_code=404, detail="Director no encontrado")
+        raise HTTPException(status_code=404, detail=D_NO_ENC)
     return director
 
 #Funciones para obtener los contenidos relacionados con un actor/director por su ID
@@ -379,7 +380,7 @@ def update_actor(idActor: str, actor: schemas.ActorUpdate, db: Session = Depends
 def update_director(idDirector: str, director: schemas.DirectorUpdate, db: Session = Depends(get_db)):
     director = crud.update_director(db=db, idDirector=idDirector, director=director)
     if not director:
-        raise HTTPException(status_code=404, detail="Director no encontrado")
+        raise HTTPException(status_code=404, detail=D_NO_ENC)
     return {"message": "Datos del director actualizados correctamente"}
 
 @app.delete("/actores/{idActor}")
@@ -393,7 +394,7 @@ def delete_actor(idActor: str, db: Session = Depends(get_db)):
 def delete_director(idDirector: str, db: Session = Depends(get_db)):
     success = crud.delete_director(db=db, director_id=idDirector)
     if not success:
-        raise HTTPException(status_code=404, detail="Director no encontrado")
+        raise HTTPException(status_code=404, detail=D_NO_ENC)
     return {"message": "Director eliminado exitosamente"}
 
 #Funciones para obtener todos los actores o directores de la base de datos
