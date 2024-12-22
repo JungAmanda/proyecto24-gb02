@@ -13,6 +13,7 @@ Comando de ejecución:
 """
 
 T_NO_ENC = "Temporada no encontrada"
+C_NO_ENC = "Contenido no encontrado"
 
 #Crear la aplicacion
 app = FastAPI(
@@ -149,7 +150,7 @@ def delete_content(
         # Eliminar película o serie
         success = crud.delete_content(db=db, idContenido=idContenido)
         if not success:
-            raise HTTPException(status_code=404, detail="Contenido no encontrado")
+            raise HTTPException(status_code=404, detail=C_NO_ENC)
         return {"message": "Contenido eliminado exitosamente"}
     
 @app.get("/peliculas/{idContenido}", response_model=schemas.Contenido)
@@ -188,7 +189,7 @@ def get_contenido(idContenido: str, db: Session = Depends(get_db)):
     contenido = crud.get_contenido_by_id(db=db, id_contenido=idContenido)    
     # Si no se encuentra el contenido, se lanza una excepción 404
     if not contenido:
-        raise HTTPException(status_code=404, detail="Contenido no encontrado")    
+        raise HTTPException(status_code=404, detail=C_NO_ENC)    
     return contenido
 
 @app.get("/series/{idSerie}", response_model=schemas.SeriesGet)
@@ -275,7 +276,7 @@ def get_contenidos_genero(idGenero: str, db: Session = Depends(get_db)):
 def actualizar_valoracion_contenido(idContenido: str, valoracion: int, db: Session = Depends(get_db)):
     valoracion_contenido = crud.valorar_contenido(db=db, idContenido=idContenido, valoracion=valoracion)
     if not valoracion_contenido:
-        raise HTTPException(status_code=404, detail="Contenido no encontrado")
+        raise HTTPException(status_code=404, detail=C_NO_ENC)
     return {"message": "Valoración del contenido actualizada exitosamente"} 
 
 #Endpoint para buscar contenidos por: titulo, genero 
