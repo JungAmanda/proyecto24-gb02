@@ -12,6 +12,8 @@ Comando de ejecución:
 
 """
 
+T_NO_ENC = "Temporada no encontrada"
+
 #Crear la aplicacion
 app = FastAPI(
     title="Microservicio de Contenidos",
@@ -140,7 +142,7 @@ def delete_content(
         # Eliminar temporada
         success = crud.delete_season(db=db, idContenido=idContenido, idTemporada=idTemporada)
         if not success:
-            raise HTTPException(status_code=404, detail="Temporada no encontrada")
+            raise HTTPException(status_code=404, detail=T_NO_ENC)
         return {"message": "Temporada eliminada exitosamente"}
 
     else:
@@ -209,14 +211,14 @@ def get_all_series(db: Session = Depends(get_db)):
 def get_temporada(idContenido: str, idTemporada: str, db: Session = Depends(get_db)):
     temporada = crud.get_temporada(db=db, idContenido=idContenido, idTemporada=idTemporada)
     if not temporada:
-        raise HTTPException(status_code=404, detail="Temporada no encontrada")
+        raise HTTPException(status_code=404, detail=T_NO_ENC)
     return temporada
 
 @app.put("/contenidos/{idContenido}/temporadas/{idTemporada}")
 def update_temporada(idContenido: str, idTemporada: str, temporada_data: schemas.TemporadaUpdate, db: Session = Depends(get_db)):
     temporada = crud.update_temporada(db=db, idContenido=idContenido, idTemporada=idTemporada, temporada=temporada_data)
     if not temporada:
-        raise HTTPException(status_code=404, detail="Temporada no encontrada")
+        raise HTTPException(status_code=404, detail=T_NO_ENC)
     return {"message": "Temporada actualizada exitosamente"}
 
 @app.get("/contenidos/{idContenido}/temporadas/{idTemporada}/episodios/{idEpisodio}", response_model=schemas.Episodio)
