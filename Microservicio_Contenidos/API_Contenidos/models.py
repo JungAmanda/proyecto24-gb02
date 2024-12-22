@@ -9,6 +9,8 @@ Descripción: Descripción de los modelos de datos utilizados en
 la base de datos
 """
 
+C_ID = "Contenido.id"
+
 # Microservicio Contenidos
 class Contenido(Base):
     __tablename__ = "Contenido"
@@ -31,7 +33,7 @@ class Contenido(Base):
 class Temporada(Base):
     __tablename__ = "Temporada"
 
-    idContenido = Column(String, ForeignKey("Contenido.id"))
+    idContenido = Column(String, ForeignKey(C_ID))
     idTemporada = Column(String, default=lambda: str(uuid.uuid4()), index=True)
     numeroTemporada = Column(Integer)
 
@@ -42,7 +44,7 @@ class Temporada(Base):
 class Episodio(Base):
     __tablename__ = "Episodio"
 
-    idContenido = Column(String, ForeignKey("Contenido.id"))
+    idContenido = Column(String, ForeignKey(C_ID))
     idTemporada = Column(String, ForeignKey("Temporada.idTemporada"))
     idEpisodio = Column(String, default=lambda: str(uuid.uuid4()), index=True)
     idDirector = Column(String, ForeignKey("Director.id"))
@@ -56,7 +58,7 @@ class Episodio(Base):
 class Trailer(Base):
     __tablename__ = "Trailer"
 
-    idContenido = Column(String, ForeignKey("Contenido.id"))
+    idContenido = Column(String, ForeignKey(C_ID))
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     titulo = Column(String)
     duracion = Column(Integer)  # En minutos
@@ -73,7 +75,7 @@ class Genero(Base):
 class Reparto(Base):
     __tablename__ = "Reparto"
 
-    idContenido = Column(String, ForeignKey("Contenido.id"), index=True)
+    idContenido = Column(String, ForeignKey(C_ID), index=True)
     idActor = Column(String, ForeignKey("Actor.id"), index=True)
 
     __table_args__ = (
